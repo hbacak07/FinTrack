@@ -11,7 +11,6 @@ sealed class DomainException(
     override val cause: Throwable? = null,
 ) : Exception(message, cause) {
 
-    // --- Ağ hataları ---
     data class NetworkException(
         override val message: String = "İnternet bağlantısı yok",
         override val cause: Throwable? = null,
@@ -22,7 +21,6 @@ sealed class DomainException(
         override val cause: Throwable? = null,
     ) : DomainException(message, cause)
 
-    // --- API hataları ---
     data class UnauthorizedException(
         override val message: String = "Oturum süresi doldu",
         override val cause: Throwable? = null,
@@ -34,7 +32,6 @@ sealed class DomainException(
         override val cause: Throwable? = null,
     ) : DomainException(message, cause)
 
-    // --- İş mantığı hataları ---
     data class ValidationException(
         val field: String,
         override val message: String,
@@ -46,7 +43,6 @@ sealed class DomainException(
         override val message: String = "Yetersiz bakiye",
     ) : DomainException(message)
 
-    // --- Bilinmeyen hata (son çare) ---
     data class UnknownException(
         override val message: String = "Beklenmeyen bir hata oluştu",
         override val cause: Throwable? = null,
