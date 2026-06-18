@@ -33,7 +33,7 @@ class LoginUseCaseTest {
     inner class ValidInput {
 
         @Test
-        @DisplayName("başarılı login User döndürür")
+        @DisplayName("başarılı login")
         fun `valid credentials return success`() = runTest {
             // Given
             val email = "test@example.com"
@@ -62,7 +62,7 @@ class LoginUseCaseTest {
     inner class InvalidInput {
 
         @Test
-        @DisplayName("boş email ValidationException döndürür")
+        @DisplayName("boş email")
         fun `blank email returns validation error`() = runTest {
             val result = loginUseCase(LoginUseCase.Params("", "password123"))
 
@@ -73,7 +73,7 @@ class LoginUseCaseTest {
         }
 
         @Test
-        @DisplayName("geçersiz email formatı hata döndürür")
+        @DisplayName("geçersiz email formatı")
         fun `invalid email format returns error`() = runTest {
             val result = loginUseCase(LoginUseCase.Params("notanemail", "password123"))
 
@@ -82,7 +82,7 @@ class LoginUseCaseTest {
         }
 
         @Test
-        @DisplayName("kısa şifre ValidationException döndürür")
+        @DisplayName("kısa şifre")
         fun `short password returns validation error`() = runTest {
             val result = loginUseCase(LoginUseCase.Params("test@example.com", "short"))
 
@@ -93,7 +93,7 @@ class LoginUseCaseTest {
         }
 
         @Test
-        @DisplayName("network hatası repository'den iletilir")
+        @DisplayName("network hatası")
         fun `network error propagates from repository`() = runTest {
             coEvery {
                 authRepository.login(any(), any())
