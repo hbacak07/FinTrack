@@ -26,3 +26,4 @@ dependencyResolutionManagement {
 rootProject.name = "FinTrack"
 include(":app")
 include(":domain")
+include(":core:network")

@@ -11,8 +11,10 @@ composeBom              = "2025.06.00"
 
 navigationCompose       = "2.9.0"
 
-hilt                    = "2.56.2"
+hilt                    = "2.58"
 hiltNavigationCompose   = "1.2.0"
+
+koin = "4.0.0"
 
 coroutines              = "1.10.2"
 
@@ -67,6 +69,10 @@ androidx-lifecycle-runtime-compose   = { group = "androidx.lifecycle", name = "l
 hilt-android                    = { group = "com.google.dagger", name = "hilt-android",          version.ref = "hilt" }
 hilt-android-compiler           = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
 hilt-navigation-compose          = { group = "androidx.hilt",     name = "hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
+
+koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }
+koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
+koin-androidx-compose = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref = "koin" }
 
 kotlinx-coroutines-android      = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
 kotlinx-coroutines-test         = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test",    version.ref = "coroutinesTest" }
