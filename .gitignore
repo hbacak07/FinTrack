@@ -1,0 +1,44 @@
+*.iml
+.gradle
+/local.properties
+/.idea/caches
+/.idea/libraries
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/navEditor.xml
+/.idea/assetWizardSettings.xml
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+local.properties
+*.apk
+*.aab
+*.ap_
+
+### build-logic kendi build çıktısı ###
+build-logic/.gradle/
+build-logic/convention/build/
+
+### Keystore — ASLA commit etme! ###
+*.jks
+*.keystore
+!keystore/debug.keystore
+
+### Gizli anahtarlar ###
+google-services.json
+keystore.properties
+signing.properties
+secrets.properties
+local.properties
+
+### Gradle wrapper jar HARİÇ tut (bu commit edilmeli) ###
+!gradle/wrapper/gradle-wrapper.jar
+
+### Test/Lint raporları ###
+**/build/reports/
+**/build/test-results/
+
+### Compose compiler raporu ###
+**/build/compose_compiler/
