@@ -32,6 +32,11 @@ sealed class DomainException(
         override val cause: Throwable? = null,
     ) : DomainException(message, cause)
 
+    data class NotFoundException(
+        override val message: String = "İstenen kaynak bulunamadı",
+        override val cause: Throwable? = null,
+    ) : DomainException(message, cause)
+
     data class ValidationException(
         val field: String,
         override val message: String,
