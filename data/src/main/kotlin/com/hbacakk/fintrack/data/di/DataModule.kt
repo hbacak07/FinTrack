@@ -2,8 +2,10 @@ package com.hbacakk.fintrack.data.di
 
 import androidx.room.Room
 import com.hbacakk.fintrack.data.local.database.FinTrackDatabase
+import com.hbacakk.fintrack.data.remote.repository.AuthRepositoryImpl
 import com.hbacakk.fintrack.data.remote.repository.BudgetRepositoryImpl
 import com.hbacakk.fintrack.data.remote.repository.TransactionRepositoryImpl
+import com.hbacakk.fintrack.domain.repository.AuthRepository
 import com.hbacakk.fintrack.domain.repository.BudgetRepository
 import com.hbacakk.fintrack.domain.repository.TransactionRepository
 import org.koin.android.ext.koin.androidContext
@@ -32,4 +34,5 @@ val dataModule = module {
     // Domain interface'i istenince, implementasyonu dön
     single<TransactionRepository> { TransactionRepositoryImpl(get()) }
     single<BudgetRepository> { BudgetRepositoryImpl(get()) }
+    single<AuthRepository> { AuthRepositoryImpl(get(), get()) }
 }

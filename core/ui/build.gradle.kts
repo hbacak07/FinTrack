@@ -1,0 +1,41 @@
+plugins {
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.compose.compiler)
+}
+
+android {
+    namespace = "com.hbacakk.fintrack.core.ui"
+    compileSdk = 36
+
+    defaultConfig {
+        minSdk = 26
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    buildFeatures {
+        compose = true
+    }
+}
+
+dependencies {
+    // Compose BOM
+    val composeBom = platform(libs.androidx.compose.bom)
+    implementation(composeBom)
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.ui.graphics)
+    implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.material.icons)
+    debugImplementation(libs.androidx.compose.ui.tooling)
+
+    // Navigation
+    implementation(libs.androidx.navigation.compose)
+
+    // Koin
+    implementation(libs.koin.androidx.compose)
+}
