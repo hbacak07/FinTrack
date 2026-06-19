@@ -4,13 +4,15 @@ import com.hbacakk.fintrack.domain.repository.MonthlySummary
 import com.hbacakk.fintrack.domain.repository.TransactionRepository
 import com.hbacakk.fintrack.domain.usecase.FlowUseCase
 import com.hbacakk.fintrack.domain.util.Result
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class ObserveMonthlySummaryUseCase(
     private val transactionRepository: TransactionRepository,
-) : FlowUseCase<ObserveMonthlySummaryUseCase.Params, MonthlySummary>(Dispatchers.IO) {
+    dispatcher: CoroutineDispatcher = Dispatchers.IO,
+) : FlowUseCase<ObserveMonthlySummaryUseCase.Params, MonthlySummary>(dispatcher) {
 
     data class Params(val year: Int, val month: Int)
 

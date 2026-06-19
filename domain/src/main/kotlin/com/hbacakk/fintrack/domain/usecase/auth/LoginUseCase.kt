@@ -5,11 +5,13 @@ import com.hbacakk.fintrack.domain.repository.AuthRepository
 import com.hbacakk.fintrack.domain.usecase.UseCase
 import com.hbacakk.fintrack.domain.util.DomainException
 import com.hbacakk.fintrack.domain.util.Result
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 
 class LoginUseCase(
     private val authRepository: AuthRepository,
-) : UseCase<LoginUseCase.Params, User>(Dispatchers.IO) {
+    dispatcher: CoroutineDispatcher = Dispatchers.IO,
+) : UseCase<LoginUseCase.Params, User>(dispatcher) {
 
     data class Params(
         val email: String,

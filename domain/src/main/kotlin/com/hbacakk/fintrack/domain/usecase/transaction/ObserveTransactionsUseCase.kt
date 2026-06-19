@@ -6,13 +6,15 @@ import com.hbacakk.fintrack.domain.model.TransactionType
 import com.hbacakk.fintrack.domain.repository.TransactionRepository
 import com.hbacakk.fintrack.domain.usecase.FlowUseCase
 import com.hbacakk.fintrack.domain.util.Result
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class ObserveTransactionsUseCase(
     private val transactionRepository: TransactionRepository,
-) : FlowUseCase<ObserveTransactionsUseCase.Params, List<Transaction>>(Dispatchers.IO) {
+    dispatcher: CoroutineDispatcher = Dispatchers.IO,
+) : FlowUseCase<ObserveTransactionsUseCase.Params, List<Transaction>>(dispatcher) {
 
     data class Params(
         val accountId: String? = null,
