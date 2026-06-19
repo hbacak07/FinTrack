@@ -16,6 +16,7 @@ import com.hbacakk.fintrack.feature.auth.navigation.AuthDestinations
 import com.hbacakk.fintrack.feature.auth.navigation.authNavGraph
 import com.hbacakk.fintrack.feature.home.navigation.HomeDestinations
 import com.hbacakk.fintrack.feature.home.navigation.homeNavGraph
+import com.hbacakk.fintrack.feature.transactions.navigation.transactionsNavGraph
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,6 +47,7 @@ fun FinTrackApp(){
                     },
                 )
                 homeNavGraph()
+                transactionsNavGraph(navController)
             }
         }
     }

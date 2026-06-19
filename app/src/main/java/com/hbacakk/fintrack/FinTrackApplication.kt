@@ -6,6 +6,7 @@ import com.hbacakk.fintrack.core.security.di.securityModule
 import com.hbacakk.fintrack.data.di.dataModule
 import com.hbacakk.fintrack.feature.auth.di.authModule
 import com.hbacakk.fintrack.feature.home.di.homeModule
+import com.hbacakk.fintrack.feature.transactions.di.transactionsModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -30,7 +31,8 @@ class FinTrackApplication : Application() {
                 securityModule,
                 dataModule,
                 authModule,
-                homeModule
+                homeModule,
+                transactionsModule,
             )
         }
     }

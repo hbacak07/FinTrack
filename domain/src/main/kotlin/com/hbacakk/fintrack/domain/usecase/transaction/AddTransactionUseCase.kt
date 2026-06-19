@@ -5,11 +5,13 @@ import com.hbacakk.fintrack.domain.repository.TransactionRepository
 import com.hbacakk.fintrack.domain.usecase.UseCase
 import com.hbacakk.fintrack.domain.util.DomainException
 import com.hbacakk.fintrack.domain.util.Result
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 
 class AddTransactionUseCase(
     private val transactionRepository: TransactionRepository,
-) : UseCase<Transaction, Transaction>(Dispatchers.IO) {
+    dispatcher: CoroutineDispatcher = Dispatchers.IO,
+) : UseCase<Transaction, Transaction>(dispatcher) {
 
     override suspend fun execute(params: Transaction): Result<Transaction> {
         if (params.amount <= 0) {

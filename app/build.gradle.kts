@@ -47,6 +47,7 @@ dependencies {
     implementation(project(":core:ui"))
     implementation(project(":feature:auth"))
     implementation(project(":feature:home"))
+    implementation(project(":feature:transactions"))
 
     // Core Android
     implementation(libs.androidx.activity.compose)
