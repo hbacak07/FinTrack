@@ -14,6 +14,8 @@ import com.hbacakk.fintrack.core.ui.theme.FinTrackTheme
 import com.hbacakk.fintrack.core.ui.theme.Surface
 import com.hbacakk.fintrack.feature.auth.navigation.AuthDestinations
 import com.hbacakk.fintrack.feature.auth.navigation.authNavGraph
+import com.hbacakk.fintrack.feature.home.navigation.HomeDestinations
+import com.hbacakk.fintrack.feature.home.navigation.homeNavGraph
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,9 +40,12 @@ fun FinTrackApp(){
                 authNavGraph(
                     navController = navController,
                     onAuthSuccess = {
-
+                        navController.navigate(HomeDestinations.HOME_ROUTE) {
+                            popUpTo(AuthDestinations.AUTH_GRAPH_ROUTE) { inclusive = true }
+                        }
                     },
                 )
+                homeNavGraph()
             }
         }
     }
