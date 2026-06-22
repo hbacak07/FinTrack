@@ -43,6 +43,7 @@ import org.koin.androidx.compose.koinViewModel
  * - LoginContent, test edilirken sahte state ile çağrılabilir
  * - Sorumluluklar ayrışır: biri "veriyi getir", diğeri "veriyi göster"
  */
+@Suppress("UnusedParameter")
 @Composable
 fun LoginScreen(
     onLoginSuccess: () -> Unit,
@@ -67,6 +68,7 @@ fun LoginScreen(
     )
 }
 
+@Suppress("UnusedParameter")
 @Composable
 private fun LoginContent(
     uiState: LoginUiState,

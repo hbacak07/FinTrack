@@ -9,3 +9,4 @@ data class TransactionListUiState(
     val selectedFilter: TransactionType? = null,
     val errorMessage: String? = null,
 )
+

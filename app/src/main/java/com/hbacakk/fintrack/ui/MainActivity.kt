@@ -11,7 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.hbacakk.fintrack.core.ui.theme.FinTrackTheme
-import com.hbacakk.fintrack.core.ui.theme.Surface
 import com.hbacakk.fintrack.feature.auth.navigation.AuthDestinations
 import com.hbacakk.fintrack.feature.auth.navigation.authNavGraph
 import com.hbacakk.fintrack.feature.budget.navigation.budgetNavGraph
@@ -50,7 +49,6 @@ fun FinTrackApp(){
                 homeNavGraph()
                 transactionsNavGraph(navController)
                 budgetNavGraph(navController)
-
             }
         }
     }
