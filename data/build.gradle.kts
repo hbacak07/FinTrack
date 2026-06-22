@@ -47,8 +47,13 @@ dependencies {
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.turbine)
     testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.11.4")
+
+    // Instrumented test bağımlılıkları (androidTest)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(libs.room.testing)
 }
 
-tasks.withType<org.gradle.api.tasks.testing.Test> {
+tasks.withType<Test> {
     useJUnitPlatform()
 }
