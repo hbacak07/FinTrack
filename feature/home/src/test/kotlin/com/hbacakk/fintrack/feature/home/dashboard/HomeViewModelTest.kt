@@ -95,8 +95,8 @@ class HomeViewModelTest {
     }
 
     private fun buildViewModel() = HomeViewModel(
-        observeMonthlySummaryUseCase = ObserveMonthlySummaryUseCase(transactionRepository),
-        observeTransactionsUseCase = ObserveTransactionsUseCase(transactionRepository),
-        observeBudgetsUseCase = ObserveBudgetsUseCase(budgetRepository),
+        observeMonthlySummaryUseCase = ObserveMonthlySummaryUseCase(transactionRepository, testDispatcher),
+        observeTransactionsUseCase = ObserveTransactionsUseCase(transactionRepository, testDispatcher),
+        observeBudgetsUseCase = ObserveBudgetsUseCase(budgetRepository, testDispatcher),
     )
 }
