@@ -10,7 +10,6 @@ sealed class DomainException(
     override val message: String,
     override val cause: Throwable? = null,
 ) : Exception(message, cause) {
-
     data class NetworkException(
         override val message: String = "İnternet bağlantısı yok",
         override val cause: Throwable? = null,

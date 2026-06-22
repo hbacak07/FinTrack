@@ -16,16 +16,15 @@ class CreateBudgetUseCase(
     private val budgetRepository: BudgetRepository,
     dispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : UseCase<Budget, Budget>(dispatcher) {
-
     override suspend fun execute(params: Budget): Result<Budget> {
         if (params.limit <= 0) {
             return Result.Error(
-                DomainException.ValidationException("limit", "Bütçe limiti sıfırdan büyük olmalı")
+                DomainException.ValidationException("limit", "Bütçe limiti sıfırdan büyük olmalı"),
             )
         }
         if (params.name.isBlank()) {
             return Result.Error(
-                DomainException.ValidationException("name", "Bütçe adı boş olamaz")
+                DomainException.ValidationException("name", "Bütçe adı boş olamaz"),
             )
         }
 

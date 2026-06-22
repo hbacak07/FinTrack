@@ -13,7 +13,10 @@ data class Transaction(
 
 enum class TransactionType { INCOME, EXPENSE, TRANSFER }
 
-enum class Category(val displayName: String, val isExpense: Boolean) {
+enum class Category(
+    val displayName: String,
+    val isExpense: Boolean,
+) {
     FOOD("Yemek", true),
     TRANSPORT("Ulaşım", true),
     SHOPPING("Alışveriş", true),

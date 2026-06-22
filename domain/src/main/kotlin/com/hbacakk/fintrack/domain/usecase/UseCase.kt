@@ -57,8 +57,8 @@ abstract class FlowUseCase<in Params, out T>(
                         DomainException.UnknownException(
                             message = throwable.message ?: "Beklenmeyen hata",
                             cause = throwable,
-                        )
-                    )
+                        ),
+                    ),
                 )
             }
 }

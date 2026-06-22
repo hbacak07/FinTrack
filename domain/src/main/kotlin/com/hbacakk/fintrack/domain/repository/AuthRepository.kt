@@ -5,7 +5,10 @@ import com.hbacakk.fintrack.domain.util.Result
 import kotlinx.coroutines.flow.Flow
 
 interface AuthRepository {
-    suspend fun login(email: String, password: String): Result<User>
+    suspend fun login(
+        email: String,
+        password: String,
+    ): Result<User>
 
     suspend fun register(
         email: String,
@@ -29,6 +32,8 @@ interface AuthRepository {
 
 sealed interface AuthState {
     data object Authenticated : AuthState
+
     data object Unauthenticated : AuthState
+
     data object Loading : AuthState
 }

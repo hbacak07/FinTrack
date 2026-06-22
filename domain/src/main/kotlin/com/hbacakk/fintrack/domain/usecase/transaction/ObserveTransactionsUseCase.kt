@@ -15,7 +15,6 @@ class ObserveTransactionsUseCase(
     private val transactionRepository: TransactionRepository,
     dispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : FlowUseCase<ObserveTransactionsUseCase.Params, List<Transaction>>(dispatcher) {
-
     data class Params(
         val accountId: String? = null,
         val type: TransactionType? = null,
@@ -23,9 +22,10 @@ class ObserveTransactionsUseCase(
     )
 
     override fun execute(params: Params): Flow<Result<List<Transaction>>> =
-        transactionRepository.observeTransactions(
-            accountId = params.accountId,
-            type      = params.type,
-            category  = params.category,
-        ).map { Result.Success(it) }
+        transactionRepository
+            .observeTransactions(
+                accountId = params.accountId,
+                type = params.type,
+                category = params.category,
+            ).map { Result.Success(it) }
 }

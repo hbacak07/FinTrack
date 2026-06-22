@@ -26,7 +26,10 @@ interface TransactionRepository {
 
     suspend fun deleteTransaction(id: String): Result<Unit>
 
-    fun observeMonthlySummary(year: Int, month: Int): Flow<MonthlySummary>
+    fun observeMonthlySummary(
+        year: Int,
+        month: Int,
+    ): Flow<MonthlySummary>
 
     suspend fun syncTransactions(): Result<Unit>
 }

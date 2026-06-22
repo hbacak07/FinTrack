@@ -13,10 +13,13 @@ class ObserveMonthlySummaryUseCase(
     private val transactionRepository: TransactionRepository,
     dispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : FlowUseCase<ObserveMonthlySummaryUseCase.Params, MonthlySummary>(dispatcher) {
-
-    data class Params(val year: Int, val month: Int)
+    data class Params(
+        val year: Int,
+        val month: Int,
+    )
 
     override fun execute(params: Params): Flow<Result<MonthlySummary>> =
-        transactionRepository.observeMonthlySummary(params.year, params.month)
+        transactionRepository
+            .observeMonthlySummary(params.year, params.month)
             .map { Result.Success(it) }
 }

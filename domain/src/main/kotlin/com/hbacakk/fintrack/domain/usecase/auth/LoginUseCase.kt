@@ -12,7 +12,6 @@ class LoginUseCase(
     private val authRepository: AuthRepository,
     dispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : UseCase<LoginUseCase.Params, User>(dispatcher) {
-
     data class Params(
         val email: String,
         val password: String,

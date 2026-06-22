@@ -8,7 +8,10 @@ data class User(
     val createdAt: Long,
 )
 
-enum class Currency(val symbol: String, val code: String) {
+enum class Currency(
+    val symbol: String,
+    val code: String,
+) {
     TRY("₺", "TRY"),
     USD("$", "USD"),
     EUR("€", "EUR"),

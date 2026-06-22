@@ -10,7 +10,9 @@ data class Account(
     val isDefault: Boolean = false,
 )
 
-enum class AccountType(val displayName: String) {
+enum class AccountType(
+    val displayName: String,
+) {
     CHECKING("Vadesiz Hesap"),
     SAVINGS("Tasarruf Hesabı"),
     CREDIT_CARD("Kredi Kartı"),

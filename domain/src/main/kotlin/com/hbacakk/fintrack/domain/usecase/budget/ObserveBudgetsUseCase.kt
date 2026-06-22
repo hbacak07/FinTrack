@@ -13,8 +13,8 @@ class ObserveBudgetsUseCase(
     private val budgetRepository: BudgetRepository,
     dispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : FlowUseCase<Unit, List<Budget>>(dispatcher) {
-
     override fun execute(params: Unit): Flow<Result<List<Budget>>> =
-        budgetRepository.observeBudgets()
+        budgetRepository
+            .observeBudgets()
             .map { Result.Success(it) }
 }
