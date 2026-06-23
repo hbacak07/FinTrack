@@ -40,5 +40,4 @@ class AuthInterceptor(
 
 interface TokenProvider {
     fun getAccessToken(): String?
-    fun getRefreshToken(): String?
 }

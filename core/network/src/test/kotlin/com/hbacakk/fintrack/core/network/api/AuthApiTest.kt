@@ -18,7 +18,6 @@ import retrofit2.converter.kotlinx.serialization.asConverterFactory
 @DisplayName("AuthApi")
 class AuthApiTest {
 
-    // MockWebServer: testin içinde gerçek bir local HTTP sunucusu açar
     private lateinit var mockWebServer: MockWebServer
     private lateinit var authApi: AuthApi
 
@@ -29,8 +28,6 @@ class AuthApiTest {
 
         val json = Json { ignoreUnknownKeys = true }
 
-        // Retrofit'i, gerçek sunucu yerine MockWebServer'ın
-        // local URL'sine yönlendiriyoruz
         val retrofit = Retrofit.Builder()
             .baseUrl(mockWebServer.url("/"))
             .client(OkHttpClient())
@@ -48,17 +45,13 @@ class AuthApiTest {
     @Test
     @DisplayName("login başarılı response'u doğru parse eder")
     fun `login parses successful response correctly`() = runTest {
-        // Given — sahte sunucunun döneceği JSON cevabı hazırla
         val jsonResponse = """
             {
-                "accessToken": "fake-access-token",
-                "refreshToken": "fake-refresh-token",
+                "token": "fake-token",
                 "user": {
                     "id": "user-123",
                     "email": "test@example.com",
-                    "fullName": "Test User",
-                    "currency": "TRY",
-                    "createdAt": 1718000000000
+                    "fullName": "Test User"
                 }
             }
         """.trimIndent()
@@ -69,11 +62,9 @@ class AuthApiTest {
                 .setBody(jsonResponse)
         )
 
-        // When
         val result = authApi.login(LoginRequest("test@example.com", "password123"))
 
-        // Then
-        assertEquals("fake-access-token", result.accessToken)
+        assertEquals("fake-token", result.token)
         assertEquals("test@example.com", result.user.email)
     }
 
@@ -84,14 +75,12 @@ class AuthApiTest {
             MockResponse()
                 .setResponseCode(200)
                 .setBody(
-                    """{"accessToken":"t","refreshToken":"r",
-                       "user":{"id":"1","email":"a@b.com","fullName":"A","currency":"TRY","createdAt":1}}"""
+                    """{"token":"t","user":{"id":"1","email":"a@b.com","fullName":"A"}}"""
                 )
         )
 
         authApi.login(LoginRequest("test@example.com", "password123"))
 
-        // MockWebServer'a gelen GERÇEK isteği yakalayıp doğruluyoruz
         val recordedRequest = mockWebServer.takeRequest()
 
         assertEquals("/auth/login", recordedRequest.path)

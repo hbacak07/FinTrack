@@ -16,14 +16,8 @@ data class RegisterRequest(
 )
 
 @Serializable
-data class RefreshTokenRequest(
-    val refreshToken: String,
-)
-
-@Serializable
 data class LoginResponse(
-    val accessToken: String,
-    val refreshToken: String,
+    val token: String,
     val user: UserDto,
 )
 
@@ -32,6 +26,4 @@ data class UserDto(
     val id: String,
     val email: String,
     val fullName: String,
-    val currency: String,
-    val createdAt: Long,
 )

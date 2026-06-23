@@ -46,6 +46,14 @@ ktlint                  = "12.2.0"
 
 mockwebserver = "4.12.0"
 
+ktor = "3.0.3"
+exposed = "0.57.0"
+h2 = "2.2.224"
+logback = "1.5.12"
+bcrypt = "0.4"
+jwt = "4.4.0"
+
+
 [libraries]
 androidx-core-ktx               = { group = "androidx.core",      name = "core-ktx",              version.ref = "coreKtx" }
 androidx-lifecycle-runtime-ktx  = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
@@ -109,6 +117,31 @@ turbine                         = { group = "app.cash.turbine", name = "turbine"
 
 okhttp-mockwebserver = { group = "com.squareup.okhttp3", name = "mockwebserver", version.ref = "mockwebserver" }
 
+# Ktor Server
+ktor-server-core = { module = "io.ktor:ktor-server-core", version.ref = "ktor" }
+ktor-server-netty = { module = "io.ktor:ktor-server-netty", version.ref = "ktor" }
+ktor-server-content-negotiation = { module = "io.ktor:ktor-server-content-negotiation", version.ref = "ktor" }
+ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
+ktor-server-auth = { module = "io.ktor:ktor-server-auth", version.ref = "ktor" }
+ktor-server-auth-jwt = { module = "io.ktor:ktor-server-auth-jwt", version.ref = "ktor" }
+ktor-server-call-logging = { module = "io.ktor:ktor-server-call-logging", version.ref = "ktor" }
+ktor-server-status-pages = { module = "io.ktor:ktor-server-status-pages", version.ref = "ktor" }
+ktor-server-cors = { module = "io.ktor:ktor-server-cors", version.ref = "ktor" }
+ktor-server-test-host = { module = "io.ktor:ktor-server-test-host", version.ref = "ktor" }
+
+# Exposed (SQL framework)
+exposed-core = { module = "org.jetbrains.exposed:exposed-core", version.ref = "exposed" }
+exposed-jdbc = { module = "org.jetbrains.exposed:exposed-jdbc", version.ref = "exposed" }
+exposed-dao = { module = "org.jetbrains.exposed:exposed-dao", version.ref = "exposed" }
+exposed-java-time = { module = "org.jetbrains.exposed:exposed-java-time", version.ref = "exposed" }
+
+# Database & misc
+logback = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
+bcrypt = { module = "org.mindrot:jbcrypt", version.ref = "bcrypt" }
+java-jwt = { module = "com.auth0:java-jwt", version.ref = "jwt" }
+
+h2 = { module = "com.h2database:h2", version.ref = "h2" }
+
 [plugins]
 android-application     = { id = "com.android.application",                          version.ref = "agp" }
 android-library         = { id = "com.android.library",                              version.ref = "agp" }
@@ -128,6 +161,7 @@ fintrack-android-compose     = { id = "fintrack.android.compose",     version = 
 fintrack-kotlin-library      = { id = "fintrack.kotlin.library",      version = "unspecified" }
 fintrack-hilt                = { id = "fintrack.hilt",                version = "unspecified" }
 
+ktor = { id = "io.ktor.plugin", version = "3.0.3" }
 
 [bundles]
 compose-core    = ["androidx-compose-ui", "androidx-compose-ui-graphics", "androidx-compose-material3", "androidx-compose-ui-tooling-preview"]

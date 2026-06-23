@@ -17,12 +17,9 @@ import kotlinx.coroutines.flow.asStateFlow
 /**
  * AuthRepository implementasyonu.
  *
- * Şu an gerçek bir backend yok (Adım 12'de Ktor yazılacak),
- * bu yüzden login isteği gerçek API'ye gidecek ama
- * backend olmadığı için network hatası alacaksın — bu BEKLENEN bir durum.
- *
- * Gerçek backend gelene kadar, test etmek için backend'i
- * Adım 12'de tamamlayacağız.
+ * Backend (Ktor) artık gerçek ve çalışıyor (Adım 12).
+ * Backend sade tutulduğu için (currency, createdAt, refreshToken
+ * desteklemiyor), bu alanlar burada varsayılan değerlerle dolduruluyor.
  */
 class AuthRepositoryImpl(
     private val authApi: AuthApi,
@@ -36,14 +33,14 @@ class AuthRepositoryImpl(
 
     override suspend fun login(email: String, password: String): Result<User> = try {
         val response = authApi.login(LoginRequest(email, password))
-        tokenStorage.saveTokens(response.accessToken, response.refreshToken)
+        tokenStorage.saveToken(response.token)
 
         val user = User(
             id = response.user.id,
             email = response.user.email,
             fullName = response.user.fullName,
-            currency = Currency.valueOf(response.user.currency),
-            createdAt = response.user.createdAt,
+            currency = Currency.TRY,
+            createdAt = System.currentTimeMillis(),
         )
 
         _authState.value = AuthState.Authenticated
@@ -58,14 +55,14 @@ class AuthRepositoryImpl(
         fullName: String,
     ): Result<User> = try {
         val response = authApi.register(RegisterRequest(email, password, fullName))
-        tokenStorage.saveTokens(response.accessToken, response.refreshToken)
+        tokenStorage.saveToken(response.token)
 
         val user = User(
             id = response.user.id,
             email = response.user.email,
             fullName = response.user.fullName,
-            currency = Currency.valueOf(response.user.currency),
-            createdAt = response.user.createdAt,
+            currency = Currency.TRY,
+            createdAt = System.currentTimeMillis(),
         )
 
         _authState.value = AuthState.Authenticated
@@ -81,14 +78,13 @@ class AuthRepositoryImpl(
     }
 
     override suspend fun refreshToken(): Result<Unit> {
-        // Adım 12'de Ktor backend hazır olunca implemente edilecek
+        // Backend refresh token desteklemiyor (bilinçli sadeleştirme, Adım 12)
         return Result.Success(Unit)
     }
 
     override fun observeAuthState(): StateFlow<AuthState> = _authState.asStateFlow()
 
     override suspend fun getCurrentUser(): Result<User> {
-        // Şimdilik basit bir stub — gerçek implementasyon backend'den gelecek
         return Result.Error(DomainException.UnknownException(message = "Henüz implemente edilmedi"))
     }
 }
