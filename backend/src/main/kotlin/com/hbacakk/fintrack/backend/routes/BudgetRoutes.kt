@@ -17,7 +17,6 @@ import io.ktor.server.routing.route
 fun Route.budgetRoutes(budgetRepository: BudgetRepository) {
     authenticate("auth-jwt") {
         route("/budgets") {
-
             get {
                 val userId = call.userId()
                 val budgets = budgetRepository.findAllByUser(userId).map { it.toDto() }
@@ -28,15 +27,16 @@ fun Route.budgetRoutes(budgetRepository: BudgetRepository) {
                 val userId = call.userId()
                 val request = call.receive<CreateBudgetRequest>()
 
-                val created = budgetRepository.create(
-                    userId = userId,
-                    name = request.name,
-                    limit = request.limit,
-                    category = request.category,
-                    period = request.period,
-                    startDate = request.startDate,
-                    endDate = request.endDate,
-                )
+                val created =
+                    budgetRepository.create(
+                        userId = userId,
+                        name = request.name,
+                        limit = request.limit,
+                        category = request.category,
+                        period = request.period,
+                        startDate = request.startDate,
+                        endDate = request.endDate,
+                    )
 
                 call.respond(HttpStatusCode.Created, created.toDto())
             }
@@ -44,13 +44,14 @@ fun Route.budgetRoutes(budgetRepository: BudgetRepository) {
     }
 }
 
-private fun BudgetRecord.toDto() = BudgetDto(
-    id = id,
-    name = name,
-    limit = limit,
-    spent = spent,
-    category = category,
-    period = period,
-    startDate = startDate,
-    endDate = endDate,
-)
+private fun BudgetRecord.toDto() =
+    BudgetDto(
+        id = id,
+        name = name,
+        limit = limit,
+        spent = spent,
+        category = category,
+        period = period,
+        startDate = startDate,
+        endDate = endDate,
+    )

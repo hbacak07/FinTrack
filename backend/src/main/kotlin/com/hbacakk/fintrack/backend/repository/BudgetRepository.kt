@@ -20,12 +20,13 @@ data class BudgetRecord(
 )
 
 class BudgetRepository {
-
-    fun findAllByUser(userId: String): List<BudgetRecord> = transaction {
-        Budgets.selectAll()
-            .where { Budgets.userId eq userId }
-            .map { it.toRecord() }
-    }
+    fun findAllByUser(userId: String): List<BudgetRecord> =
+        transaction {
+            Budgets
+                .selectAll()
+                .where { Budgets.userId eq userId }
+                .map { it.toRecord() }
+        }
 
     fun create(
         userId: String,
@@ -55,14 +56,15 @@ class BudgetRepository {
         return BudgetRecord(id, name, limit, 0.0, category, period, startDate, endDate)
     }
 
-    private fun ResultRow.toRecord() = BudgetRecord(
-        id = this[Budgets.id],
-        name = this[Budgets.name],
-        limit = this[Budgets.limit],
-        spent = this[Budgets.spent],
-        category = this[Budgets.category],
-        period = this[Budgets.period],
-        startDate = this[Budgets.startDate],
-        endDate = this[Budgets.endDate],
-    )
+    private fun ResultRow.toRecord() =
+        BudgetRecord(
+            id = this[Budgets.id],
+            name = this[Budgets.name],
+            limit = this[Budgets.limit],
+            spent = this[Budgets.spent],
+            category = this[Budgets.category],
+            period = this[Budgets.period],
+            startDate = this[Budgets.startDate],
+            endDate = this[Budgets.endDate],
+        )
 }

@@ -13,7 +13,6 @@ import org.jetbrains.exposed.sql.transactions.transaction
  * gerçek bir PostgreSQL/MySQL kullanılır.
  */
 object DatabaseFactory {
-
     fun init() {
         Database.connect(
             url = "jdbc:h2:mem:fintrack;DB_CLOSE_DELAY=-1;MODE=PostgreSQL",

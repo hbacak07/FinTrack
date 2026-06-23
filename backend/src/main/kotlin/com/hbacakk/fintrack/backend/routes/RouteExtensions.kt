@@ -7,5 +7,5 @@ import io.ktor.server.auth.principal
 fun ApplicationCall.userId(): String {
     val principal = principal<JWTPrincipal>()
     return principal?.payload?.getClaim("userId")?.asString()
-        ?: throw IllegalStateException("userId claim bulunamadı")
+        ?: error("userId claim bulunamadı")
 }

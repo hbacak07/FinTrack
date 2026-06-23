@@ -33,8 +33,7 @@ class HomeViewModel(
 
         viewModelScope.launch {
             // Önce sync'i bitir, SONRA Room'u gözlemlemeye başla
-            val syncResult = syncTransactionsUseCase(Unit)
-            Log.d("FinTrackSync", "Sync result: $syncResult")
+            syncTransactionsUseCase(Unit)
 
             combine(
                 observeMonthlySummaryUseCase(
@@ -45,12 +44,6 @@ class HomeViewModel(
             ) { summaryResult, transactionsResult, budgetsResult ->
                 buildUiState(summaryResult, transactionsResult, budgetsResult)
             }.collect { newState ->
-                Log.d(
-                    "FinTrackHome",
-                    "New state: transactions=${newState.recentTransactions.size}, " +
-                            "summary=${newState.monthlySummary}, " +
-                            "error=${newState.errorMessage}",
-                )
                 _uiState.update { newState }
             }
         }

@@ -9,6 +9,9 @@ import com.hbacakk.fintrack.domain.repository.TransactionRepository
 import com.hbacakk.fintrack.domain.usecase.budget.ObserveBudgetsUseCase
 import com.hbacakk.fintrack.domain.usecase.transaction.ObserveMonthlySummaryUseCase
 import com.hbacakk.fintrack.domain.usecase.transaction.ObserveTransactionsUseCase
+import com.hbacakk.fintrack.domain.usecase.transaction.SyncTransactionsUseCase
+import com.hbacakk.fintrack.domain.util.Result
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
@@ -36,6 +39,8 @@ class HomeViewModelTest {
         Dispatchers.setMain(testDispatcher)
         transactionRepository = mockk()
         budgetRepository = mockk()
+        // syncTransactions her testte çağrıldığı için varsayılan davranışı burada tanımlıyoruz
+        coEvery { transactionRepository.syncTransactions() } returns Result.Success(Unit)
     }
 
     @AfterEach
@@ -62,7 +67,6 @@ class HomeViewModelTest {
         every { budgetRepository.observeBudgets() } returns flowOf(emptyList())
 
         val viewModel = buildViewModel()
-
         testDispatcher.scheduler.advanceUntilIdle()
 
         val state = viewModel.uiState.value
@@ -81,14 +85,13 @@ class HomeViewModelTest {
 
         every {
             transactionRepository.observeMonthlySummary(any(), any())
-        } returns flowOf(MonthlySummary(0.0, 0.0, 0.0,0, null))
+        } returns flowOf(MonthlySummary(0.0, 0.0, 0.0, 0, null))
         every {
             transactionRepository.observeTransactions(any(), any(), any())
         } returns flowOf(emptyList())
         every { budgetRepository.observeBudgets() } returns flowOf(listOf(exceededBudget))
 
         val viewModel = buildViewModel()
-
         testDispatcher.scheduler.advanceUntilIdle()
 
         assertTrue(viewModel.uiState.value.hasExceededBudgets)
@@ -98,5 +101,6 @@ class HomeViewModelTest {
         observeMonthlySummaryUseCase = ObserveMonthlySummaryUseCase(transactionRepository, testDispatcher),
         observeTransactionsUseCase = ObserveTransactionsUseCase(transactionRepository, testDispatcher),
         observeBudgetsUseCase = ObserveBudgetsUseCase(budgetRepository, testDispatcher),
+        syncTransactionsUseCase = SyncTransactionsUseCase(transactionRepository, testDispatcher),
     )
 }

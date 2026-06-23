@@ -20,12 +20,18 @@ object JwtConfig {
 
     private val algorithm = Algorithm.HMAC256(SECRET)
 
-    val verifier = JWT.require(algorithm)
-        .withIssuer(ISSUER)
-        .build()
+    val verifier =
+        JWT
+            .require(algorithm)
+            .withIssuer(ISSUER)
+            .build()
 
-    fun generateToken(userId: String, email: String): String =
-        JWT.create()
+    fun generateToken(
+        userId: String,
+        email: String,
+    ): String =
+        JWT
+            .create()
             .withIssuer(ISSUER)
             .withClaim("userId", userId)
             .withClaim("email", email)

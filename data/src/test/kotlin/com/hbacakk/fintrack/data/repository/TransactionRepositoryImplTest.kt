@@ -1,6 +1,8 @@
 package com.hbacakk.fintrack.data.repository
 
 import app.cash.turbine.test
+import com.hbacakk.fintrack.core.network.api.TransactionApi
+import com.hbacakk.fintrack.core.network.model.TransactionDto
 import com.hbacakk.fintrack.data.local.dao.TransactionDao
 import com.hbacakk.fintrack.data.local.entity.TransactionEntity
 import com.hbacakk.fintrack.data.remote.repository.TransactionRepositoryImpl
@@ -25,11 +27,12 @@ import org.junit.jupiter.api.Test
 class TransactionRepositoryImplTest {
 
     private val transactionDao: TransactionDao = mockk()
+    private val transactionApi: TransactionApi = mockk()
     private lateinit var repository: TransactionRepositoryImpl
 
     @BeforeEach
     fun setUp() {
-        repository = TransactionRepositoryImpl(transactionDao)
+        repository = TransactionRepositoryImpl(transactionDao, transactionApi)
     }
 
     @Nested
@@ -77,6 +80,8 @@ class TransactionRepositoryImplTest {
         fun `inserts transaction and returns success`() = runTest {
             val transaction = fakeTransaction()
             coEvery { transactionDao.insert(any()) } returns Unit
+            coEvery { transactionApi.createTransaction(any()) } returns fakeTransactionDto()
+            coEvery { transactionDao.markAsSynced(any()) } returns Unit
 
             val result = repository.addTransaction(transaction)
 
@@ -93,6 +98,19 @@ class TransactionRepositoryImplTest {
             val result = repository.addTransaction(transaction)
 
             assertTrue(result is Result.Error)
+        }
+
+        @Test
+        @DisplayName("backend'e yazma başarısız olsa da local kayıt Success döner")
+        fun `returns success even when backend sync fails`() = runTest {
+            val transaction = fakeTransaction()
+            coEvery { transactionDao.insert(any()) } returns Unit
+            coEvery { transactionApi.createTransaction(any()) } throws RuntimeException("Network error")
+
+            val result = repository.addTransaction(transaction)
+
+            assertTrue(result is Result.Success)
+            coVerify { transactionDao.insert(any()) }
         }
     }
 
@@ -135,5 +153,15 @@ class TransactionRepositoryImplTest {
         date        = 1718000000000L,
         accountId   = "acc-456",
         isRecurring = false,
+    )
+
+    private fun fakeTransactionDto() = TransactionDto(
+        id = "tx-123",
+        amount = 150.0,
+        type = TransactionType.EXPENSE.name,
+        category = Category.FOOD.name,
+        description = "Yemek",
+        date = 1718000000000L,
+        accountId = "acc-456",
     )
 }

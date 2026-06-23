@@ -10,7 +10,5 @@ class SyncTransactionsUseCase(
     private val transactionRepository: TransactionRepository,
     dispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : UseCase<Unit, Unit>(dispatcher) {
-
-    override suspend fun execute(params: Unit): Result<Unit> =
-        transactionRepository.syncTransactions()
+    override suspend fun execute(params: Unit): Result<Unit> = transactionRepository.syncTransactions()
 }

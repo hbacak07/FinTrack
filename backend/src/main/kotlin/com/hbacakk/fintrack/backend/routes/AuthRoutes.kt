@@ -15,7 +15,6 @@ import io.ktor.server.routing.Route
 import io.ktor.server.routing.post
 
 fun Route.authRoutes(userRepository: UserRepository) {
-
     post("/auth/register") {
         val request = call.receive<RegisterRequest>()
 

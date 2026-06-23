@@ -15,8 +15,11 @@ data class UserRecord(
 )
 
 class UserRepository {
-
-    fun create(email: String, password: String, fullName: String): UserRecord {
+    fun create(
+        email: String,
+        password: String,
+        fullName: String,
+    ): UserRecord {
         val id = UUID.randomUUID().toString()
         val passwordHash = BCrypt.hashpw(password, BCrypt.gensalt())
 
@@ -33,19 +36,23 @@ class UserRepository {
         return UserRecord(id, email, passwordHash, fullName)
     }
 
-    fun findByEmail(email: String): UserRecord? = transaction {
-        Users.selectAll().where { Users.email eq email }
-            .map {
-                UserRecord(
-                    id = it[Users.id],
-                    email = it[Users.email],
-                    passwordHash = it[Users.passwordHash],
-                    fullName = it[Users.fullName],
-                )
-            }
-            .singleOrNull()
-    }
+    fun findByEmail(email: String): UserRecord? =
+        transaction {
+            Users
+                .selectAll()
+                .where { Users.email eq email }
+                .map {
+                    UserRecord(
+                        id = it[Users.id],
+                        email = it[Users.email],
+                        passwordHash = it[Users.passwordHash],
+                        fullName = it[Users.fullName],
+                    )
+                }.singleOrNull()
+        }
 
-    fun verifyPassword(rawPassword: String, hash: String): Boolean =
-        BCrypt.checkpw(rawPassword, hash)
+    fun verifyPassword(
+        rawPassword: String,
+        hash: String,
+    ): Boolean = BCrypt.checkpw(rawPassword, hash)
 }

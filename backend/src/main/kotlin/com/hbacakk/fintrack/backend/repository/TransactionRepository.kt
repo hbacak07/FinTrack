@@ -21,12 +21,13 @@ data class TransactionRecord(
 )
 
 class TransactionRepository {
-
-    fun findAllByUser(userId: String): List<TransactionRecord> = transaction {
-        Transactions.selectAll()
-            .where { Transactions.userId eq userId }
-            .map { it.toRecord() }
-    }
+    fun findAllByUser(userId: String): List<TransactionRecord> =
+        transaction {
+            Transactions
+                .selectAll()
+                .where { Transactions.userId eq userId }
+                .map { it.toRecord() }
+        }
 
     fun create(
         userId: String,
@@ -55,19 +56,24 @@ class TransactionRepository {
         return TransactionRecord(id, amount, type, category, description, date, accountId)
     }
 
-    fun deleteById(id: String, userId: String): Boolean = transaction {
-        Transactions.deleteWhere {
-            (Transactions.id eq id) and (Transactions.userId eq userId)
-        } > 0
-    }
+    fun deleteById(
+        id: String,
+        userId: String,
+    ): Boolean =
+        transaction {
+            Transactions.deleteWhere {
+                (Transactions.id eq id) and (Transactions.userId eq userId)
+            } > 0
+        }
 
-    private fun ResultRow.toRecord() = TransactionRecord(
-        id = this[Transactions.id],
-        amount = this[Transactions.amount],
-        type = this[Transactions.type],
-        category = this[Transactions.category],
-        description = this[Transactions.description],
-        date = this[Transactions.date],
-        accountId = this[Transactions.accountId],
-    )
+    private fun ResultRow.toRecord() =
+        TransactionRecord(
+            id = this[Transactions.id],
+            amount = this[Transactions.amount],
+            type = this[Transactions.type],
+            category = this[Transactions.category],
+            description = this[Transactions.description],
+            date = this[Transactions.date],
+            accountId = this[Transactions.accountId],
+        )
 }

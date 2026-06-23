@@ -16,7 +16,6 @@ import io.ktor.server.routing.route
 fun Route.transactionRoutes(transactionRepository: TransactionRepository) {
     authenticate("auth-jwt") {
         route("/transactions") {
-
             get {
                 val userId = call.userId()
                 val transactions = transactionRepository.findAllByUser(userId).map { it.toDto() }
@@ -27,15 +26,16 @@ fun Route.transactionRoutes(transactionRepository: TransactionRepository) {
                 val userId = call.userId()
                 val request = call.receive<CreateTransactionRequest>()
 
-                val created = transactionRepository.create(
-                    userId = userId,
-                    amount = request.amount,
-                    type = request.type,
-                    category = request.category,
-                    description = request.description,
-                    date = request.date,
-                    accountId = request.accountId,
-                )
+                val created =
+                    transactionRepository.create(
+                        userId = userId,
+                        amount = request.amount,
+                        type = request.type,
+                        category = request.category,
+                        description = request.description,
+                        date = request.date,
+                        accountId = request.accountId,
+                    )
 
                 call.respond(HttpStatusCode.Created, created.toDto())
             }
@@ -55,12 +55,13 @@ fun Route.transactionRoutes(transactionRepository: TransactionRepository) {
     }
 }
 
-private fun com.hbacakk.fintrack.backend.repository.TransactionRecord.toDto() = TransactionDto(
-    id = id,
-    amount = amount,
-    type = type,
-    category = category,
-    description = description,
-    date = date,
-    accountId = accountId,
-)
+private fun com.hbacakk.fintrack.backend.repository.TransactionRecord.toDto() =
+    TransactionDto(
+        id = id,
+        amount = amount,
+        type = type,
+        category = category,
+        description = description,
+        date = date,
+        accountId = accountId,
+    )

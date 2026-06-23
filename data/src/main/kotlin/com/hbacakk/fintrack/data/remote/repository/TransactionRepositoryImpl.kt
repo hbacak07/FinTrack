@@ -44,7 +44,6 @@ class TransactionRepositoryImpl(
         type: TransactionType?,
         category: Category?,
     ): Flow<List<Transaction>> {
-        android.util.Log.d("FinTrackSync", "observeTransactions called: accountId=$accountId, type=$type")
         val flow = when {
             accountId != null -> transactionDao.observeByAccount(accountId)
             type != null -> transactionDao.observeByType(type.name)
@@ -53,7 +52,6 @@ class TransactionRepositoryImpl(
 
         return flow
             .map { entities ->
-                android.util.Log.d("FinTrackSync", "Room emitted ${entities.size} entities")
                 entities.toDomain()
             }
             .catch { emit(emptyList()) }
@@ -90,7 +88,7 @@ class TransactionRepositoryImpl(
                 ),
             )
             transactionDao.markAsSynced(entity.id)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             // Network yoksa sessizce devam et — local veri zaten kaydedildi
         }
 
@@ -168,8 +166,6 @@ class TransactionRepositoryImpl(
         }
 
         transactionDao.insertAll(entities)
-        android.util.Log.d("FinTrackSync", "Inserted ${entities.size} entities. DB count after insert: ${transactionDao.getUnsynced().size} unsynced")
-
         val unsynced = transactionDao.getUnsynced()
         unsynced.forEach { local ->
             try {
@@ -184,7 +180,7 @@ class TransactionRepositoryImpl(
                     ),
                 )
                 transactionDao.markAsSynced(local.id)
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 // Bu kayıt sync edilemedi, sonraki sync'te tekrar denenecek
             }
         }
