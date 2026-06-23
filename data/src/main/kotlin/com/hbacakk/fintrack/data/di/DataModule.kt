@@ -32,7 +32,7 @@ val dataModule = module {
 
     // Repository implementasyonları
     // Domain interface'i istenince, implementasyonu dön
-    single<TransactionRepository> { TransactionRepositoryImpl(get()) }
+    single<TransactionRepository> { TransactionRepositoryImpl(get(), get()) }
     single<BudgetRepository> { BudgetRepositoryImpl(get()) }
     single<AuthRepository> { AuthRepositoryImpl(get(), get()) }
 }

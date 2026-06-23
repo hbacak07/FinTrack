@@ -1,6 +1,7 @@
 package com.hbacakk.fintrack.core.network.di
 
 import com.hbacakk.fintrack.core.network.api.AuthApi
+import com.hbacakk.fintrack.core.network.api.TransactionApi
 import com.hbacakk.fintrack.core.network.interceptor.AuthInterceptor
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
@@ -51,4 +52,6 @@ val networkModule = module {
 
     // AuthApi — Retrofit'in create() fonksiyonuyla gerçek implementasyonu üretilir
     single { get<Retrofit>().create(AuthApi::class.java) }
+    // TransactionApi — Retrofit'in create() fonksiyonuyla gerçek implementasyonu üretilir
+    single { get<Retrofit>().create(TransactionApi::class.java) }
 }

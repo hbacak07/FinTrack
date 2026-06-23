@@ -1,6 +1,9 @@
 package com.hbacakk.fintrack.data.remote.repository
 
+import com.hbacakk.fintrack.core.network.api.TransactionApi
+import com.hbacakk.fintrack.core.network.model.CreateTransactionRequest
 import com.hbacakk.fintrack.data.local.dao.TransactionDao
+import com.hbacakk.fintrack.data.local.entity.TransactionEntity
 import com.hbacakk.fintrack.data.mapper.toDomain
 import com.hbacakk.fintrack.data.mapper.toEntity
 import com.hbacakk.fintrack.domain.model.Category
@@ -26,9 +29,14 @@ import java.util.UUID
  *
  * UI her zaman Room'dan okur, asla direkt API'den değil.
  * Bu "Single Source of Truth" pattern'idir.
+ *
+ * syncTransactions(): backend'den gelen listeyi Room'a yazar
+ * (pull sync). Bu, dummy/seed data gibi backend'de var olan
+ * ama Room'da olmayan kayıtların UI'da görünmesini sağlar.
  */
 class TransactionRepositoryImpl(
     private val transactionDao: TransactionDao,
+    private val transactionApi: TransactionApi,
 ) : TransactionRepository {
 
     override fun observeTransactions(
@@ -36,6 +44,7 @@ class TransactionRepositoryImpl(
         type: TransactionType?,
         category: Category?,
     ): Flow<List<Transaction>> {
+        android.util.Log.d("FinTrackSync", "observeTransactions called: accountId=$accountId, type=$type")
         val flow = when {
             accountId != null -> transactionDao.observeByAccount(accountId)
             type != null -> transactionDao.observeByType(type.name)
@@ -43,7 +52,10 @@ class TransactionRepositoryImpl(
         }
 
         return flow
-            .map { entities -> entities.toDomain() }
+            .map { entities ->
+                android.util.Log.d("FinTrackSync", "Room emitted ${entities.size} entities")
+                entities.toDomain()
+            }
             .catch { emit(emptyList()) }
     }
 
@@ -63,6 +75,25 @@ class TransactionRepositoryImpl(
             .copy(id = transaction.id.ifBlank { UUID.randomUUID().toString() })
             .toEntity(isSynced = false)
         transactionDao.insert(entity)
+
+        // Backend'e de yazmayı dene — başarısız olursa isSynced=false kalır,
+        // ileride syncTransactions() ile tekrar denenebilir.
+        try {
+            transactionApi.createTransaction(
+                CreateTransactionRequest(
+                    amount = entity.amount,
+                    type = entity.type,
+                    category = entity.category,
+                    description = entity.description,
+                    date = entity.date,
+                    accountId = entity.accountId,
+                ),
+            )
+            transactionDao.markAsSynced(entity.id)
+        } catch (e: Exception) {
+            // Network yoksa sessizce devam et — local veri zaten kaydedildi
+        }
+
         Result.Success(entity.toDomain())
     } catch (e: Exception) {
         Result.Error(DomainException.UnknownException(cause = e))
@@ -102,20 +133,62 @@ class TransactionRepositoryImpl(
                     ?.key
 
                 MonthlySummary(
-                    totalIncome      = income,
-                    totalExpense     = expense,
+                    totalIncome = income,
+                    totalExpense = expense,
                     transactionCount = transactions.size,
                     topExpenseCategory = topCategory,
                 )
             }
-            .catch { emit(MonthlySummary(0.0, 0.0, 0.0, 0,null)) }
+            .catch { emit(MonthlySummary(0.0, 0.0, 0.0, 0, null)) }
     }
 
+    /**
+     * Pull sync: backend'deki tüm transaction'ları çekip Room'a yazar.
+     *
+     * Gerçek bir production uygulamasında bu fonksiyon "son sync
+     * zamanından sonra değişenler" gibi incremental bir strateji
+     * kullanır — burada öğrenme/demo amaçlı basit bir "tümünü çek,
+     * üzerine yaz" (upsert) stratejisi uyguluyoruz.
+     */
     override suspend fun syncTransactions(): Result<Unit> = try {
+        val remoteTransactions = transactionApi.getTransactions()
+
+        val entities = remoteTransactions.map { dto ->
+            TransactionEntity(
+                id = dto.id,
+                amount = dto.amount,
+                type = dto.type,
+                category = dto.category,
+                description = dto.description,
+                date = dto.date,
+                accountId = dto.accountId,
+                isRecurring = false,
+                isSynced = true,
+            )
+        }
+
+        transactionDao.insertAll(entities)
+        android.util.Log.d("FinTrackSync", "Inserted ${entities.size} entities. DB count after insert: ${transactionDao.getUnsynced().size} unsynced")
+
         val unsynced = transactionDao.getUnsynced()
-        // API sync — Adım 8'de Ktor backend hazır olunca implemente edilecek
-        // Şimdilik başarılı kabul ediyoruz
-        unsynced.forEach { transactionDao.markAsSynced(it.id) }
+        unsynced.forEach { local ->
+            try {
+                transactionApi.createTransaction(
+                    CreateTransactionRequest(
+                        amount = local.amount,
+                        type = local.type,
+                        category = local.category,
+                        description = local.description,
+                        date = local.date,
+                        accountId = local.accountId,
+                    ),
+                )
+                transactionDao.markAsSynced(local.id)
+            } catch (e: Exception) {
+                // Bu kayıt sync edilemedi, sonraki sync'te tekrar denenecek
+            }
+        }
+
         Result.Success(Unit)
     } catch (e: Exception) {
         Result.Error(DomainException.UnknownException(cause = e))
